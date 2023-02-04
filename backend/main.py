@@ -1,26 +1,27 @@
-from typing import Optional
-
+from dataclasses import asdict
 import uvicorn
+from os import environ
 from fastapi import FastAPI
 from config.configuration import get_configuration
+from database.connection import custom_database, custom_base
+from sqlalchemy.ext.declarative import declarative_base
+from routes.auth.auth_route import auth_router
 
-c = get_configuration()
+custom_config = asdict(get_configuration())
 
 def create_app():
     app = FastAPI()
     # TODO - initialize app
+    custom_database.init_app(app=app, **custom_config)
+    app.include_router(auth_router)
     return app
 
 app = create_app()
-
-@app.route("/")
-def index():
-    return "Hi"
 
 if __name__ == "__main__":
     uvicorn.run(
         "main:app", 
         host="0.0.0.0", 
-        port=c.PORT, 
-        reload=c.RELOAD
+        port=custom_config.get("PORT", 8000), 
+        reload=custom_config.get("RELOAD", True)
     )

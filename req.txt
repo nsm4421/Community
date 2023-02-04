@@ -2,3 +2,5 @@ fastapi
 uvicorn
 pymysql
 sqlalchemy
+pyjwt
+bcrypt

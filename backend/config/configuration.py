@@ -12,7 +12,7 @@ class BaseConfig:
     """
     PORT:int = 8000
     BASE_DIR = default_base_dir
-    DB_POOL_RECYCLE:int = 900
+    DB_POOL_RECYCLE:int = 900   
     DE_ECHO:bool = True
 
 @dataclass
@@ -21,6 +21,8 @@ class DevConfig(BaseConfig):
         개발용 세팅
     """
     RELOAD:bool = True
+    # 'mysql+pymysql://{USERNAME}:{PASSWORD}@{HOST}:{PORT}/{DBNAME}'
+    DB_URL:str = "mysql+pymysql://root:1221@localhost:3306/community?charset=utf8mb4"
 
 @dataclass
 class ProdConfig(BaseConfig):
