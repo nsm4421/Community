@@ -1,5 +1,6 @@
+import os
 from fastapi import FastAPI
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, MetaData
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import logging
@@ -33,6 +34,9 @@ class CustomDatabase:
         @app.on_event("startup")
         def startup():
             cls._engine.connect()
+            if (os.environ.get('API_ENV', 'dev') == 'dev'):
+                metadata = MetaData()
+                metadata.create_all(cls._engine)
             logging.info("DB connected...")
 
         @app.on_event("shutdown")
@@ -61,4 +65,5 @@ class CustomDatabase:
         return self.get_session
 
 custom_database = CustomDatabase()
+
 custom_base = declarative_base()

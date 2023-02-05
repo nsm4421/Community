@@ -93,12 +93,9 @@ class BaseMixin:
         if not s:
             session.close()
         return q.all()
-
+    
     @classmethod
-    def order_by(cls, col_name:str='created_at', desc:bool=True, *args: str):
-        col = getattr(cls, col_name)
-        if desc:
-            cls._q = cls._q.order_by(col.desc)  
-        else:
-            cls._q = cls._q.order_by(col.asec)
-        return cls
+    def delete(cls, session: Session = None):
+        s = next(custom_database.session()) if not session else session
+        q = s.query(cls)
+        q.delete()

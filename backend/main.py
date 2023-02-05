@@ -1,6 +1,7 @@
 from dataclasses import asdict
 import uvicorn
-from os import environ
+import os
+from sqlalchemy import MetaData
 from fastapi import FastAPI
 from config.configuration import get_configuration
 from database.connection import custom_database, custom_base
@@ -13,6 +14,8 @@ def create_app():
     app = FastAPI()
     # TODO - initialize app
     custom_database.init_app(app=app, **custom_config)
+
+
     app.include_router(auth_router)
     return app
 

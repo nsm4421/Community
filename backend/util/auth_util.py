@@ -3,6 +3,7 @@ from routes.auth.auth_request import RegisterRequest
 import re
 import jwt
 from datetime import datetime, timedelta
+import bcrypt
 
 def validate_register_request(req:RegisterRequest):
     """
@@ -42,3 +43,6 @@ def generate_token(data, secret:str, duration:int=168, algorithm:str="HS256"):
     _data = data.copy()
     _data.update({"exp": datetime.utcnow() + timedelta(hours=duration)})
     return jwt.encode(_data, secret, algorithm=algorithm)
+
+def encrypt_password(password:str):
+    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
